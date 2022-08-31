@@ -1,0 +1,179 @@
+<!--
+Use HTML comments to add comments
+-->
+
+# MarkTex Test Page
+
+@@gamma = 1/sqrt(1 - v^2/c^2)@@
+
+```md
+@@gamma = 1/sqrt(1 - v^2/c^2)@@
+```
+
+The *lorentz factor equation* and the Asciimath MarkTex block shown above.
+
+Open this test document for the formatting used, it's very similar to markdown!
+
+Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
+
+---
+
+# Table of Contents
+
+[[TOC]]
+
+
+## Markdown Style Formatting
+
+### Code Blocks
+
+Code blocks and inline code blocks are functional as always, highlighted with `highlight.js`:
+
+```python
+print("hello world")
+
+for i in range(10):
+    print(i)
+```
+
+```md
+Example of a long code block:
+
+You also have your usual markdown formatting such as *italics*, *bold*, ~~crossout~~, __underline__, etc...:
+```
+
+### Usual Markdown
+
+You also have your usual markdown formatting such as *italics*, *bold*, ~~crossout~~, __underline__, etc...:
+
+
+## LaTeX
+
+Latex blocks work, put inline latex in `$latex$` and math blocks in `$$latex$$`:
+
+$$c^2 = a^2 + b^2 - 2abcos(\theta)$$
+
+Above is the law of cosines, where $c^2 = a^2 + b^2$ in the case of a right triangle.
+
+$$
+\text{Math blocks can also be multiline}\newline
+\text{As shown here}
+$$
+
+Note you cannot have blank lines in multiline math blocks, this is a limitation of the Markdown parser.
+
+
+## AsciiMath
+
+AsciiMath blocks are also supported, put inline math in `$asciimath$` and math blocks in `$$asciimath$$`:
+
+@@(-b +- sqrt(b^2 - 4ac)) / (2a)@@
+
+Above is the quadratic formula, where @sqrt(b^2 - 4ac)@ is 0 if there is only one root.
+
+@@
+bb"Math blocks can also be multiline"
+bb"as shown here (newlines are preserved)"
+@@
+
+
+## More Examples
+
+Here are some more AsciiMath examples, taken from the [AsciiMath page](http://asciimath.org/):
+
+@@sum_(i=1)^n i^3=((n(n+1))/2)^2@@
+
+```pl
+sum_(i=1)^n i^3=((n(n+1))/2)^2
+```
+
+@@[[a,b,|,c],[d,e,|,f]]@@
+
+```pl
+[[a,b,|,c],[d,e,|,f]]
+```
+
+@@obrace(1+2+3+4)^("4 terms")@@
+
+```pl
+obrace(1+2+3+4)^("4 terms")
+```
+
+
+## Extended Markdown
+
+### Small text
+
+Use `^small text^` for ^small text, good for *faking* those footnotes we don't support.^
+
+
+
+## Other Markdown Features
+
+Other features put here for testing:
+
+### Lists
+
+1. This is
+2. a numbered
+3. list
+    1. Sublist
+
+- This is an
+- unordered
+- list
+    - with a sublist
+    - more items
+
+
+### Images
+
+![Caption](https://willyyanto.files.wordpress.com/2010/02/no-latex.png "200x100")
+
+### Blockquotes
+
+> “Can the fundamental nature of matter really be lawlessness? Can the stability and order of the world be but a temporary dynamic equilibrium achieved in a corner of the universe, a short-lived eddy in a chaotic current?”
+
+### Tables
+
+|Name|Balance|Gender|
+|------|--------|-------|
+|John Smith|$1|Male|
+|Jane Smith|$1|Female|
+
+
+## Numbered Headers
+
+### Headers
+
+### Are
+
+#### Automatically numbered
+
+##### By their tier
+
+##### level
+
+### This
+
+#### Should
+
+#### Work
+
+####* Add an `*` after the header # (Like `##* Header`) to make it unnumbered
+
+Top level headers are never numbered
+
+## Edge Case Tests
+
+None of the following should render any math:
+
+Latex and ascii blocks in code blocks: `$a^2 + b^2$`, `@c^2 + d^2@`, `$$a^2 + b^2$$`, `@@c^2 + d^2@@`,
+
+```plaintext
+@a^2 + b^2@
+@@a^2 + b^2@@
+$a^2 + b^2$
+$$a^2 + b^2$$
+
+```

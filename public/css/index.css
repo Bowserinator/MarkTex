@@ -1,0 +1,75 @@
+body {
+    font-family: 'CMU Serif';
+    font-size: 12pt;
+    background-color: #eee;
+}
+
+.katex { font-size: 1.16em !important; }
+
+pre > code {
+    font-size: 10.5pt;
+    white-space: pre-wrap;
+}
+
+hr {
+    border: 0;
+    border-bottom: 1px solid #ccc;
+}
+
+table, th, td {
+    border: 1px #777 solid;
+    padding: 0 8px;
+}
+
+img {
+    max-width: 100%;
+    margin: 0 auto;
+    display: block;
+}
+
+table {
+    border-collapse: collapse;
+}
+
+h1, h2, h3, h4, h5 {
+    margin-top: 1.5em;
+}
+
+h1:first-child {
+    margin-top: 0;
+}
+
+.inline-code-block {
+    font-size: 10.5pt;
+    color: #dd0000;
+    padding: 2px 4px;
+    border-radius: 2px;
+    background-color: #f7f7f7;
+}
+
+.toc { line-height: 1.6em; }
+
+.content {
+    width: 210mm;
+    margin: 20px auto;
+    background-color: white;
+    padding: 1.6cm 1.4cm;
+    box-sizing: border-box;
+
+    box-shadow:
+        0px 1.2px 2.1px rgba(0, 0, 0, 0.028),
+        0px 3.3px 5.8px rgba(0, 0, 0, 0.04),
+        0px 7.8px 13.9px rgba(0, 0, 0, 0.052),
+        0px 26px 46px rgba(0, 0, 0, 0.08);
+}
+
+@media print {
+    .body {
+        background-color: white;
+    }
+
+    .content {
+        margin: 0;
+        box-shadow: none;
+    }
+}
