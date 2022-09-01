@@ -4,6 +4,7 @@ import config from './src/config.js';
 import { exec } from 'child_process';
 import chokidar from 'chokidar';
 import signale from 'signale';
+import queue from 'queue';
 
 import fs from 'fs';
 import path from 'path';
@@ -12,6 +13,11 @@ import { fileURLToPath } from 'url';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
+
+const q = queue({
+    results: [],
+    autostart: true
+});
 
 import { Command } from 'commander';
 const program = new Command();
@@ -49,39 +55,41 @@ if (Number.isNaN(options.port) || !Number.isInteger(options.port) || options.por
  * @param {string} filename Path to file to parse, must be under options.input
  */
 function outFile(filename) {
-    // Parse file and save to output
-    fs.readFile(filename, 'utf-8', (err, data) => {
-        if (err) {
-            signale.fatal(`Error reading file "${filename}":\n  ${err}`);
-            return;
-        }
+    q.push(() => {
+        // Parse file and save to output
+        return fs.readFile(filename, 'utf-8', (err, data) => {
+            if (err) {
+                signale.fatal(`Error reading file "${filename}":\n  ${err}`);
+                return;
+            }
 
-        const relativePath = path.relative(options.input, filename);
-        const outPath = path.join(options.output, relativePath.replace('.' + config.fileExt, '.html'));
-        const outDir = path.parse(outPath).dir;
+            const relativePath = path.relative(options.input, filename);
+            const outPath = path.join(options.output, relativePath.replace('.' + config.fileExt, '.html'));
+            const outDir = path.parse(outPath).dir;
 
-        // Create out dir if it doesn't exist
-        if (!fs.existsSync(outDir))
-            fs.mkdirSync(outDir, { recursive: true });
+            // Create out dir if it doesn't exist
+            if (!fs.existsSync(outDir))
+                fs.mkdirSync(outDir, { recursive: true });
 
-        const html = `
-<head>
-    <link rel="stylesheet" href="http://localhost:${options.port}/css/index.css">
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.1/dist/katex.min.css" integrity="sha384-pe7s+HmY6KvqRkrRRUr4alQJ0SkmzCft3RpK1ttGMa7qk8Abp/MEa/4wgceRHloO" crossorigin="anonymous">
-    <link rel="stylesheet"
-    href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/11.6.0/styles/default.min.css">
-    <!--<script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/11.6.0/highlight.min.js"></script>-->
-</head>
+            const html = `
+    <head>
+        <link rel="stylesheet" href="http://localhost:${options.port}/css/index.css">
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.1/dist/katex.min.css" integrity="sha384-pe7s+HmY6KvqRkrRRUr4alQJ0SkmzCft3RpK1ttGMa7qk8Abp/MEa/4wgceRHloO" crossorigin="anonymous">
+        <link rel="stylesheet"
+        href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/11.6.0/styles/default.min.css">
+        <!--<script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/11.6.0/highlight.min.js"></script>-->
+    </head>
 
-<body>
-    <div class="content">
-        ${parse(data)}
-    </div>
-</body>`;
+    <body>
+        <div class="content">
+            ${parse(data)}
+        </div>
+    </body>`;
 
-        fs.writeFile(outPath, html, err2 => {
-            if (err2)
-                signale.fatal(`Error writing file "${outPath}":\n   ${err2}`);
+            fs.writeFile(outPath, html, err2 => {
+                if (err2)
+                    signale.fatal(`Error writing file "${outPath}":\n   ${err2}`);
+            });
         });
     });
 }
