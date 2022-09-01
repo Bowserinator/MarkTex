@@ -11,10 +11,20 @@
   "dependencies": {
     "asciimath-to-latex": "^0.5.1",
     "chokidar": "^3.5.3",
+    "commander": "^9.4.0",
+    "glob": "^8.0.3",
     "highlight.js": "^11.6.0",
     "katex": "^0.16.1",
     "marked": "^4.0.19",
-    "marked-images": "^3.0.0"
+    "marked-images": "^3.0.0",
+    "signale": "^1.4.0"
   },
-  "type": "module"
+  "type": "module",
+  "devDependencies": {
+    "@babel/eslint-parser": "^7.18.9",
+    "@hellomouse/eslint-config": "^1.1.5",
+    "eslint": "^8.23.0",
+    "eslint-plugin-jsdoc": "^39.3.6",
+    "sass": "^1.54.8"
+  }
 }

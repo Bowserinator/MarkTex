@@ -4,6 +4,7 @@ out/
 # Messy dev notes
 SPECS.txt
 TODO.txt
+.vscode
 
 # Logs
 logs

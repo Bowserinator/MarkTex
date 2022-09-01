@@ -1,16 +1,19 @@
+/**
+ * Regular latex code blocks + inline code blocks
+ * Rendered server-side with KaTeX
+ */
+
 import renderLatex from '../latex.js';
 
-/**
- * Regular latex
- * Usage:
- *      $inline latex math block$
- *      $$block latex math block$$
- */
+// Latex code block
+//  Usage: $$math$$
 export const latexMathBlock = {
     name: 'latexMathBlock',
     level: 'inline',
-    start(src) { return src.match(/\$\$[^$]/)?.index; },
-    tokenizer(src, tokens) {
+    start(src) {
+        return src.match(/\$\$[^$]/)?.index;
+    },
+    tokenizer(src, _tokens) {
         const rule = /^(?:\$\$(?:[\s\S]+?)\$\$)+?/m;
         const match = rule.exec(src);
         if (match) {
@@ -28,11 +31,15 @@ export const latexMathBlock = {
     }
 };
 
+// Inline latex
+//  Usage: $math$
 export const latexMathInline = {
     name: 'latexMathInline',
     level: 'inline',
-    start(src) { return src.match(/\$[^\$]/)?.index; },
-    tokenizer(src, tokens) {
+    start(src) {
+        return src.match(/\$[^$]/)?.index;
+    },
+    tokenizer(src, _tokens) {
         const rule = /^(?:\$(?:.+?)\$)+?/;
         const match = rule.exec(src);
         if (match) {

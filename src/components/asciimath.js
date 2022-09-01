@@ -1,17 +1,23 @@
+/**
+ * Asciimath code blocks + inline code blocks
+ * Asciimath is first converted to latex then rendered
+ * with KaTeX
+ */
+
 import asciimath2latex from 'asciimath-to-latex';
 import renderLatex from '../latex.js';
 
-/**
- * Alternative: Use asciimath instead of latex for equations
- * Usage:
- *      @inline ascii math block@
- *      @@block ascii math block@@
- */
+// Code block:
+//  Usage: @@block@@
+//  Note: level is 'inline', otherwise you
+//        can't use @@ in some code blocks
 export const asciiMathBlock = {
     name: 'asciiMathBlock',
     level: 'inline',
-    start(src) { return src.match(/@@[^@]/)?.index; },
-    tokenizer(src, tokens) {
+    start(src) {
+        return src.match(/@@[^@]/)?.index;
+    },
+    tokenizer(src, _tokens) {
         const rule = /^(?:@@(?:[\s\S]+?)@@)+?/m;
         const match = rule.exec(src);
         if (match) {
@@ -25,17 +31,23 @@ export const asciiMathBlock = {
         }
     },
     renderer(token) {
+        // Preserve original newlines: split, parse each separately then rejoin
+        // with the LaTeX newline
         const orgText = token.text.split('\n');
         const asciiText = orgText.map(asciimath2latex.default).join('\\newline');
         return renderLatex(asciiText, true);
     }
 };
 
+// Inline block
+//  Usage: @math@
 export const asciiMathInline = {
     name: 'asciiMathInline',
     level: 'inline',
-    start(src) { return src.match(/@[^@]/)?.index; },
-    tokenizer(src, tokens) {
+    start(src) {
+        return src.match(/@[^@]/)?.index;
+    },
+    tokenizer(src, _tokens) {
         const rule = /^(?:@(?:.+?)@)+?/;
         const match = rule.exec(src);
         if (match) {

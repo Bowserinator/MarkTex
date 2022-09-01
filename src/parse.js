@@ -1,10 +1,15 @@
 import { marked } from 'marked';
-import { asciiMathBlock, asciiMathInline, latexMathBlock,
-    latexMathInline, smallInline, unnumberedHeader, TOC } from './components/index.js';
 import hljs from 'highlight.js/lib/common';
 import markedImages from 'marked-images';
-import doc from './document.js';
 
+import {
+    asciiMathBlock, asciiMathInline, latexMathBlock,
+    latexMathInline, smallInline, unnumberedHeader, TOC
+} from './components/index.js';
+import doc from './document.js';
+import config from './config.js';
+
+// Settings
 marked.setOptions({
     renderer: new marked.Renderer(),
     highlight: (code, lang) => {
@@ -17,40 +22,50 @@ marked.setOptions({
     breaks: false,
     sanitize: false,
     smartLists: true,
-    smartypants: false,
+    smartypants: true,
     xhtml: false
 });
 
-// Override function
+
+// Custom renderer
 const renderer = {
+    // Wrap inline code blocks to have custom CSS
     codespan(code) {
         return `<code class="inline-code-block">${code}</code>`;
     },
-    heading(text, level, raw, slugger) {
+    // Add headers to document while parsing
+    heading(text, level, _raw, _slugger) {
         let extra = level > 1 ? doc.addHeader(level) + '. ' : '';
         doc.addHeaderName(`${extra}${text}`, level);
-
-        return `<h${level}>${extra}${text}</h${level}>`
+        return `<h${level}>${extra}${text}</h${level}>`;
     }
 };
-
 marked.use({ renderer });
 
-// Math highlight, ensure block extensions go after their inline ver (higher priority)
-marked.use({ extensions: [asciiMathInline, asciiMathBlock, latexMathInline, latexMathBlock, smallInline, unnumberedHeader, TOC] });
+// Ensure block extensions go after their inline ver (higher priority)
+// Ie, $$latex$$ must go after (have higher priority) than $latex$
+marked.use({
+    extensions: [
+        asciiMathInline, asciiMathBlock, latexMathInline,
+        latexMathBlock, smallInline, unnumberedHeader, TOC
+    ]
+});
 
-marked.use(markedImages({
-    xhtml: false
-}));
+// Additional image features (size + attribute control)
+marked.use(markedImages({ xhtml: false }));
 
-
+/**
+ * Convert marktex -> html
+ * @param {string} fileData Content of the .mtx file
+ * @return {string} HTML Output
+ */
 export function parse(fileData) {
     doc.reset();
-    return marked.parse(fileData).replaceAll(
-        '<table-of-contents/>',
-`
-<div class="toc">
-${doc.headers.join('<br>')}
-</div>`
+    const html = marked.parse(fileData);
+
+    // Replace special HTML tags
+    return html.replaceAll(
+        config.tocTag,
+        `<div class="toc">${doc.headers.join('<br>')}</div>`
     );
 }

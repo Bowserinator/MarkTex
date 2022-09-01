@@ -2,12 +2,16 @@
  * Unnumbered header
  * Usage:
  *      ##...* Header
+ * Example:
+ *  ##* This header won't automatically have a number prepended
  */
- export const unnumberedHeader = {
+export const unnumberedHeader = {
     name: 'unnumberedHeader',
     level: 'inline',
-    start(src) { return src.match(/\#/)?.index; },
-    tokenizer(src, tokens) {
+    start(src) {
+        return src.match(/#/)?.index;
+    },
+    tokenizer(src, _tokens) {
         const rule = /^(?:#{1,6}\* (?:.+?)$)+?/;
         const match = rule.exec(src);
         if (match) {

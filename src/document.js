@@ -1,10 +1,16 @@
-
-
+/**
+ * A single document to be converted. The markdown parser
+ * works synchronously, so this document is reset() right before
+ * it's updated.
+ * @author Bowserinator
+ */
 class Document {
+    /** Construct a document */
     constructor() {
         this.reset();
     }
 
+    /** Reset all properties to default */
     reset() {
         this.footnotes = [];
         this.headers = [];
@@ -28,7 +34,6 @@ class Document {
         if (level === 1) return;
         if (level === 2)
             string = `<b>${string}</b>`;
-
         this.headers.push('&nbsp;&nbsp;&nbsp;&nbsp;'.repeat(level - 1) + string);
     }
 }

@@ -1,13 +1,15 @@
 /**
- * Small text
+ * Small text (Wrap with <small>)
  * Usage:
  *      ^small text^
  */
 export const smallInline = {
     name: 'smallInline',
     level: 'inline',
-    start(src) { return src.match(/\^[^^]/)?.index; },
-    tokenizer(src, tokens) {
+    start(src) {
+        return src.match(/\^[^^]/)?.index;
+    },
+    tokenizer(src, _tokens) {
         const rule = /^(?:\^(?:.+?)\^)+?/;
         const match = rule.exec(src);
         if (match) {
