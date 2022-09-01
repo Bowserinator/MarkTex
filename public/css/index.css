@@ -47,6 +47,17 @@ h1:first-child {
     background-color: #f7f7f7;
 }
 
+.footnote {
+    display: flex;
+    width: 100%;
+    flex-direction: row;
+    font-size: 10.5pt;
+}
+
+.footnote > div:nth-child(2) {
+    margin-left: 7px;
+}
+
 .toc { line-height: 1.6em; }
 
 .content {

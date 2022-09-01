@@ -4,7 +4,8 @@ import markedImages from 'marked-images';
 
 import {
     asciiMathBlock, asciiMathInline, latexMathBlock,
-    latexMathInline, smallInline, unnumberedHeader, TOC
+    latexMathInline, smallInline, unnumberedHeader, TOC,
+    footnoteRef, footnote
 } from './components/index.js';
 import doc from './document.js';
 import config from './config.js';
@@ -48,7 +49,8 @@ marked.use({ renderer });
 marked.use({
     extensions: [
         asciiMathInline, asciiMathBlock, latexMathInline,
-        latexMathBlock, smallInline, unnumberedHeader, TOC
+        latexMathBlock, smallInline, unnumberedHeader, TOC,
+        footnoteRef, footnote
     ]
 });
 
