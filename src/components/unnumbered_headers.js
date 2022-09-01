@@ -1,3 +1,5 @@
+import { marked } from 'marked';
+
 /**
  * Unnumbered header
  * Usage:
@@ -29,6 +31,7 @@ export const unnumberedHeader = {
         }
     },
     renderer(token) {
-        return `<h${token.level}>${this.parser.parseInline(token.tokens)}</h${token.level}>`;
+        return marked.Renderer.prototype.heading.apply(marked,
+            [this.parser.parseInline(token.tokens), token.level, token.raw, new marked.Slugger()]);
     }
 };

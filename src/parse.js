@@ -37,7 +37,8 @@ const renderer = {
     heading(text, level, _raw, _slugger) {
         let extra = level > 1 ? doc.addHeader(level) + '. ' : '';
         doc.addHeaderName(`${extra}${text}`, level);
-        return `<h${level}>${extra}${text}</h${level}>`;
+        return marked.Renderer.prototype.heading.apply(this,
+            [`${extra}${text}`, level, _raw, _slugger]);
     }
 };
 marked.use({ renderer });
