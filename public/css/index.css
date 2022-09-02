@@ -60,6 +60,11 @@ h1:first-child {
 
 .toc { line-height: 1.6em; }
 
+.toc a {
+    color: inherit;
+    text-decoration: none;
+}
+
 .content {
     width: 210mm;
     margin: 20px auto;

@@ -1,3 +1,5 @@
+import { marked } from 'marked';
+
 /**
  * A single document to be converted. The markdown parser
  * works synchronously, so this document is reset() right before
@@ -18,7 +20,7 @@ class Document {
     }
 
     addHeader(level) {
-        if (level === 1) return ''; // Ignore headers
+        if (level === 1) return ''; // Ignore top-level headers
         level -= 2; // Zero index
 
         // Reset all header levels after
@@ -31,10 +33,13 @@ class Document {
     }
 
     addHeaderName(string, level) {
-        if (level === 1) return;
-        if (level === 2)
+        const headerId = (new marked.Slugger()).slug(string);
+        if (level === 1) return; // Ignore top-level headers
+        if (level === 2) // 2nd top-level headers are bolded
             string = `<b>${string}</b>`;
-        this.headers.push('&nbsp;&nbsp;&nbsp;&nbsp;'.repeat(level - 1) + string);
+        // Indent by level
+        this.headers.push('&nbsp;&nbsp;&nbsp;&nbsp;'.repeat(level - 1) +
+            `<a href="#header-${headerId}">${string}</a>`);
     }
 }
 

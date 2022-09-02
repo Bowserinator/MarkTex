@@ -24,7 +24,10 @@ marked.setOptions({
     sanitize: false,
     smartLists: true,
     smartypants: true,
-    xhtml: false
+    xhtml: false,
+
+    headerIds: true,
+    headerPrefix: 'header-'
 });
 
 
@@ -35,11 +38,11 @@ const renderer = {
         return `<code class="inline-code-block">${code}</code>`;
     },
     // Add headers to document while parsing
-    heading(text, level, _raw, _slugger) {
+    heading(text, level, raw, slugger) {
         let extra = level > 1 ? doc.addHeader(level) + '. ' : '';
         doc.addHeaderName(`${extra}${text}`, level);
         return marked.Renderer.prototype.heading.apply(this,
-            [`${extra}${text}`, level, _raw, _slugger]);
+            [`${extra}${text}`, level, `${extra}${raw}`, slugger]);
     }
 };
 marked.use({ renderer });
