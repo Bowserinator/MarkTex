@@ -52,6 +52,16 @@ export class AbstractExtension {
     }
 
     /**
+     * Pre-process markdown code
+     * @param md Raw markdown document
+     * @return Modified markdown code, or null to skip the preparse
+     *         step entirely (won't even call the method)
+     */
+    preParse(md: string): string | null {
+        return null;
+    }
+
+    /**
      * List of extensions for marked.use
      * @return List of extensions to put into marked.use
      */

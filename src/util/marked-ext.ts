@@ -1,5 +1,3 @@
-import { marked } from 'marked';
-
 interface MdSettings {
     name: string;       // Name of token type
     level: string;      // 'block' or 'inline'
@@ -10,7 +8,7 @@ interface MdSettings {
     tokenRules?: (token: any, src: string, tokens: Array<any>, match: Array<string>) => void;
 
     // Function to do something with the tokens afterwards, usually for inline parsing
-    inline?: (lexer: typeof marked.Lexer, token: any) => void;
+    inline?: (lexer: any, token: any) => void;
 
     // Convert token to string, should take into account the document output type
     renderer: (token: any) => string;

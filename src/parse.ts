@@ -9,6 +9,7 @@ import fs from 'fs';
 import doc from './document.js';
 import config from './config.js';
 import { AbstractExtension } from './abstract-extension.js';
+import signale from 'signale';
 
 // eslint-disable-next-line @typescript-eslint/naming-convention
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
@@ -62,6 +63,8 @@ function loadExtension(extension: AbstractExtension) {
 
 extensions.forEach(loadExtension);
 
+const preParseExtensions = extensions.filter(ext => ext.preParse('') !== null);
+
 
 /**
  * Convert marktex -> html
@@ -70,6 +73,16 @@ extensions.forEach(loadExtension);
  */
 export function parse(fileData: string) {
     doc.reset();
+
+    // Preparsing
+    for (let ext of preParseExtensions) {
+        let newFileData = ext.preParse(fileData);
+        if (newFileData !== null)
+            fileData = newFileData;
+        else
+            signale.error(`Extension ${ext.name} returned null when pre-parsing, this can only be done if the extension will ALWAYS skip the preparse step, otherwise it should return the original text`);
+    }
+
     const html = marked.parse(fileData);
 
     // Replace special HTML tags
