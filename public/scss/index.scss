@@ -95,3 +95,20 @@ h1:first-child {
         page-break-after: always
     }
 }
+
+
+.inline-addition,
+.inline-comment,
+.inline-deletion {
+    border-radius: 2px;
+}
+
+.inline-addition {
+    background-color: #C8E6C9;
+}
+.inline-deletion {
+    background-color: #FFCDD2;
+}
+.inline-comment {
+    background-color: #BBDEFB;
+}

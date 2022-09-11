@@ -61,7 +61,7 @@ Color: TODO
                 },
                 renderer(token: any) {
                     // @ts-expect-error
-                    return `<span style="background-color: green">${this.parser.parseInline(token.tokens)}</span>`;
+                    return `<span class="inline-addition">${this.parser.parseInline(token.tokens)}</span>`;
                 }
             }),
             mdExt({
@@ -77,7 +77,7 @@ Color: TODO
                 },
                 renderer(token: any) {
                     // @ts-expect-error
-                    return `<span style="background-color: red">${this.parser.parseInline(token.tokens)}</span>`;
+                    return `<span class="inline-deletion">${this.parser.parseInline(token.tokens)}</span>`;
                 }
             }),
             mdExt({
@@ -93,7 +93,7 @@ Color: TODO
                 },
                 renderer(token: any) {
                     // @ts-expect-error
-                    return `<span style="background-color: blue">${this.parser.parseInline(token.tokens)}</span>`;
+                    return `<span class="inline-comment">${this.parser.parseInline(token.tokens)}</span>`;
                 }
             })];
     }

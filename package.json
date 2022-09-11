@@ -4,10 +4,10 @@
     "description": "Better LaTeX syntax transpiler",
     "main": "index.js",
     "scripts": {
-        "serve": "cd build && node server/server.js",
+        "serve": "cd build && node index.js",
         "build": "tsc -p tsconfig.json",
-        "scssHot": "sass --style=compressed --watch scss/:client/",
-        "scssCompile": "sass --style=compressed scss/:client/",
+        "scssHot": "sass --style=compressed --watch public/scss/:build/public/css/",
+        "scssCompile": "sass --style=compressed public/scss/:build/public/css/",
         "scss": "npm-run-all scssCompile copyfiles",
         "copyfiles": "copyfiles -e \"**/*.ts\" \"./client/**\" ./build/",
         "minify": "minify-all-js ./build",
