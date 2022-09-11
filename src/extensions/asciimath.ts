@@ -33,7 +33,7 @@ Inline: Surround with @
                 name: 'asciiMathInline',
                 level: 'inline',
                 start: /@[^@]/,
-                tokenMatch: /^(?:@(?:.+?)@)+?/,
+                tokenMatch: /^(?:@(?:.+?)@)/,
                 tokenRules(token, src, tokens, match) {
                     token.text = match[0].trim().substring(1, match[0].length - 1);
                 },
@@ -46,7 +46,7 @@ Inline: Surround with @
                 name: 'asciiMathBlock',
                 level: 'block',
                 start: /^@@[^@]/m,
-                tokenMatch: /^(?:@@(?:[\s\S]+?)@@)+?/,
+                tokenMatch: /^(?:@@(?:[\s\S]+?)@@)/,
                 tokenRules(token, src, tokens, match) {
                     token.text = match[0].trim().substring(2, match[0].length - 2);
                 },

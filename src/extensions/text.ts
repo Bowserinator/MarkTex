@@ -1,7 +1,4 @@
 import { AbstractExtension } from '../abstract-extension.js';
-import renderLatex from '../util/latex.js';
-
-import asciimath2latex from 'asciimath-to-latex';
 import { mdExt } from '../util/marked-ext.js';
 
 /**
@@ -16,17 +13,10 @@ More text formatting options
 Superscript: ^super^
 Subscript: ~sub~
 Highlight: ==highlight==  (html <mark>)
-Emojis: :emoji_name:
-Task lists: - [x] test
-Page break: +++
-Sub in metadata: [%key]
-Abbreviations: *[HTML]: HyperText Markup Language
-    Will auto add <abbr> data in text
 Additions: {++added++}
 Deletions: {--deleted--}
 Comments: {>>wtf<<}
 Preserve whitespace: |     line with whitespace preserved
-Color: TODO
 `);
     }
 
@@ -36,7 +26,7 @@ Color: TODO
                 name: 'highlightInline',
                 level: 'inline',
                 start: /==[^=]/,
-                tokenMatch: /^(?:==(?:.+?)==)+?/,
+                tokenMatch: /^(?:==(?:.+?)==)/,
                 tokenRules(token, src, tokens, match) {
                     token.text = match[0].trim().substring(2, match[0].length - 2);
                 },
@@ -52,7 +42,7 @@ Color: TODO
                 name: 'additionsInline',
                 level: 'inline',
                 start: /\{\+\+/,
-                tokenMatch: /^(?:\{\+\+(?:.+?)\+\+\})+?/,
+                tokenMatch: /^(?:\{\+\+(?:.+?)\+\+\})/,
                 tokenRules(token, src, tokens, match) {
                     token.text = match[0].trim().substring(3, match[0].length - 3);
                 },
@@ -68,7 +58,7 @@ Color: TODO
                 name: 'deletionsInline',
                 level: 'inline',
                 start: /\{--/,
-                tokenMatch: /^(?:\{--(?:.+?)--\})+?/,
+                tokenMatch: /^(?:\{--(?:.+?)--\})/,
                 tokenRules(token, src, tokens, match) {
                     token.text = match[0].trim().substring(3, match[0].length - 3);
                 },
@@ -84,7 +74,7 @@ Color: TODO
                 name: 'commentsInline',
                 level: 'inline',
                 start: /\{>>/,
-                tokenMatch: /^(?:\{>>(?:.+?)<<\})+?/,
+                tokenMatch: /^(?:\{>>(?:.+?)<<\})/,
                 tokenRules(token, src, tokens, match) {
                     token.text = match[0].trim().substring(3, match[0].length - 3);
                 },
@@ -94,6 +84,56 @@ Color: TODO
                 renderer(token: any) {
                     // @ts-expect-error
                     return `<span class="inline-comment">${this.parser.parseInline(token.tokens)}</span>`;
+                }
+            }),
+            mdExt({
+                name: 'subInline',
+                level: 'inline',
+                start: /~[^~]/,
+                tokenMatch: /^(?:~(?:[^~]+.*?)~)/,
+                tokenRules(token, src, tokens, match) {
+                    token.text = match[0].substring(1, match[0].length - 1);
+                },
+                inline(lexer, token) {
+                    lexer.inline(token.text, token.tokens);
+                },
+                renderer(token: any) {
+                    // @ts-expect-error
+                    return `<sub>${this.parser.parseInline(token.tokens)}</sub>`;
+                }
+            }),
+            mdExt({
+                name: 'supInline',
+                level: 'inline',
+                start: /\^[^^]/,
+                tokenMatch: /^(?:\^(?:[^^]+.*?)\^)/,
+                tokenRules(token, src, tokens, match) {
+                    token.text = match[0].trim().substring(1, match[0].length - 1);
+                },
+                inline(lexer, token) {
+                    lexer.inline(token.text, token.tokens);
+                },
+                renderer(token: any) {
+                    // @ts-expect-error
+                    return `<sup>${this.parser.parseInline(token.tokens)}</sup>`;
+                }
+            }),
+            mdExt({
+                name: 'whitespaceBlock',
+                level: 'block',
+                start: /^\| /m,
+                tokenMatch: /^(?:\| (?:.+?)(?:\n|$))/,
+                tokenRules(token, src, tokens, match) {
+                    token.text = match[0].trim()
+                        .substring(2, match[0].length)
+                        .replaceAll('  ', ' &nbsp;');
+                },
+                inline(lexer, token) {
+                    lexer.inline(token.text, token.tokens);
+                },
+                renderer(token: any) {
+                    // @ts-expect-error
+                    return this.parser.parseInline(token.tokens);
                 }
             })];
     }

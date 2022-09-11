@@ -4,6 +4,9 @@ interface MdSettings {
     start: RegExp;      // Regex start hint
     tokenMatch: RegExp; // Regex to perform match
 
+    // Override default start function
+    startFunction?: (src: string) => number | undefined;
+
     // Function to add additional properties to token
     tokenRules?: (token: any, src: string, tokens: Array<any>, match: Array<string>) => void;
 
@@ -24,6 +27,8 @@ export function mdExt(keys: MdSettings): any {
         name: keys.name,
         level: keys.level,
         start(src: string) {
+            if (keys.startFunction)
+                return keys.startFunction(src);
             return src.match(keys.start)?.index;
         },
         tokenizer(src: string, tokens: Array<any>) {
