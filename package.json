@@ -1,31 +1,46 @@
 {
-  "name": "marktex",
-  "version": "1.0.0",
-  "description": "Better LaTeX syntax transpiler",
-  "main": "index.js",
-  "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
-  },
-  "author": "Bowserinator",
-  "license": "MIT",
-  "dependencies": {
-    "asciimath-to-latex": "^0.5.1",
-    "chokidar": "^3.5.3",
-    "commander": "^9.4.0",
-    "glob": "^8.0.3",
-    "highlight.js": "^11.6.0",
-    "katex": "^0.16.1",
-    "marked": "^4.0.19",
-    "marked-images": "^3.0.0",
-    "queue": "^6.0.2",
-    "signale": "^1.4.0"
-  },
-  "type": "module",
-  "devDependencies": {
-    "@babel/eslint-parser": "^7.18.9",
-    "@hellomouse/eslint-config": "^1.1.5",
-    "eslint": "^8.23.0",
-    "eslint-plugin-jsdoc": "^39.3.6",
-    "sass": "^1.54.8"
-  }
+    "name": "marktex",
+    "version": "1.0.0",
+    "description": "Better LaTeX syntax transpiler",
+    "main": "index.js",
+    "scripts": {
+        "serve": "cd build && node server/server.js",
+        "build": "tsc -p tsconfig.json",
+        "scssHot": "sass --style=compressed --watch scss/:client/",
+        "scssCompile": "sass --style=compressed scss/:client/",
+        "scss": "npm-run-all scssCompile copyfiles",
+        "copyfiles": "copyfiles -e \"**/*.ts\" \"./client/**\" ./build/",
+        "minify": "minify-all-js ./build",
+        "buildAll": "npm-run-all build scss copyfiles minify"
+    },
+    "author": "Bowserinator",
+    "license": "MIT",
+    "dependencies": {
+        "asciimath-to-latex": "^0.5.1",
+        "chokidar": "^3.5.3",
+        "commander": "^9.4.0",
+        "glob": "^8.0.3",
+        "highlight.js": "^11.6.0",
+        "katex": "^0.16.1",
+        "marked": "^4.0.19",
+        "marked-images": "^3.0.0",
+        "queue": "^6.0.2",
+        "signale": "^1.4.0"
+    },
+    "type": "module",
+    "devDependencies": {
+        "@babel/eslint-parser": "^7.18.9",
+        "@hellomouse/eslint-config": "^1.1.5",
+        "@hellomouse/eslint-config-typescript": "^1.3.0",
+        "@types/eslint": "^8.4.6",
+        "@types/katex": "^0.14.0",
+        "@types/marked": "^4.0.7",
+        "@types/node": "^18.7.16",
+        "@types/signale": "^1.4.4",
+        "eslint": "^8.23.0",
+        "eslint-plugin-jsdoc": "^39.3.6",
+        "npm-run-all": "^4.1.5",
+        "sass": "^1.54.9",
+        "typescript": "^4.8.3"
+    }
 }

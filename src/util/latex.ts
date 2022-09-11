@@ -1,13 +1,13 @@
 import katex from 'katex';
-import config from './config.js';
+import config from '../config.js';
 
 /**
  * Render a latex string with a given display mode
- * @param {string} str LaTeX to render
- * @param {boolean} displayMode true if LaTeX block, false if inline
- * @return {string} HTML for rendered latex
+ * @param str LaTeX to render
+ * @param displayMode true if LaTeX block, false if inline
+ * @return HTML for rendered latex
  */
-export default function renderLatex(str, displayMode) {
+export default function renderLatex(str: string, displayMode: boolean): string {
     return katex.renderToString(str, {
         displayMode,
         throwOnError: false,

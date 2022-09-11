@@ -1,10 +1,13 @@
-# Compiled HTML files
+# Compiled files
 out/
+build/
+/dist/
 
 # Messy dev notes
-SPECS.txt
 TODO.txt
 .vscode
+debug.mtx
+errors.txt
 
 # Logs
 logs

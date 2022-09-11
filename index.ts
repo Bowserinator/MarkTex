@@ -1,4 +1,4 @@
-import { parse } from './src/parse.js';
+import { generateHTML } from './src/parse.js';
 import config from './src/config.js';
 
 import { exec } from 'child_process';
@@ -71,20 +71,7 @@ function outFile(filename) {
             if (!fs.existsSync(outDir))
                 fs.mkdirSync(outDir, { recursive: true });
 
-            const html = `
-    <head>
-        <link rel="stylesheet" href="http://localhost:${options.port}/css/index.css">
-        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.1/dist/katex.min.css" integrity="sha384-pe7s+HmY6KvqRkrRRUr4alQJ0SkmzCft3RpK1ttGMa7qk8Abp/MEa/4wgceRHloO" crossorigin="anonymous">
-        <link rel="stylesheet"
-        href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/11.6.0/styles/default.min.css">
-        <!--<script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/11.6.0/highlight.min.js"></script>-->
-    </head>
-
-    <body>
-        <div class="content">
-            ${parse(data)}
-        </div>
-    </body>`;
+            const html = generateHTML(data, options);
 
             fs.writeFile(outPath, html, err2 => {
                 if (err2)

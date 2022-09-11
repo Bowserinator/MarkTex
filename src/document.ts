@@ -7,6 +7,10 @@ import { marked } from 'marked';
  * @author Bowserinator
  */
 class Document {
+    footnotes: Array<string>;
+    headers: Array<string>;
+    headerNumbers: [number, number, number, number, number, number, number, number];
+
     /** Construct a document */
     constructor() {
         this.reset();
@@ -19,7 +23,7 @@ class Document {
         this.headerNumbers = [0, 0, 0, 0, 0, 0, 0, 0];
     }
 
-    addHeader(level) {
+    addHeader(level: number) {
         if (level === 1) return ''; // Ignore top-level headers
         level -= 2; // Zero index
 

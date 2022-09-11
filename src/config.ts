@@ -5,7 +5,7 @@ export default {
     // Make sure this string is unique and won't come up normally!
     tocTag: '<table-of-contents>',
     // Default port to serve assets on
-    assetsPort: 12535,
+    assetsPort: 12536,
     // Set to true if you only run this on your own computer!
     // If this is public set to false
     trustLatex: true

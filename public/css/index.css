@@ -88,4 +88,10 @@ h1:first-child {
         margin: 0;
         box-shadow: none;
     }
+
+    .pagebreak {
+        clear: both;
+        break-after: always;
+        page-break-after: always
+    }
 }
