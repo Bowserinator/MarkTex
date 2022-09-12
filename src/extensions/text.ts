@@ -15,7 +15,7 @@ Subscript: ~sub~
 Highlight: ==highlight==  (html <mark>)
 Additions: {++added++}
 Deletions: {--deleted--}
-Comments: {>>wtf<<}
+Comments: {>>comment<<}
 Preserve whitespace: |     line with whitespace preserved
 `);
     }
@@ -23,7 +23,7 @@ Preserve whitespace: |     line with whitespace preserved
     exportExtensions() {
         return [
             mdExt({
-                name: 'highlightInline',
+                name: 'highlight',
                 level: 'inline',
                 start: /==[^=]/,
                 tokenMatch: /^(?:==(?:.+?)==)/,
@@ -39,7 +39,7 @@ Preserve whitespace: |     line with whitespace preserved
                 }
             }),
             mdExt({
-                name: 'additionsInline',
+                name: 'addition',
                 level: 'inline',
                 start: /\{\+\+/,
                 tokenMatch: /^(?:\{\+\+(?:.+?)\+\+\})/,
@@ -55,7 +55,7 @@ Preserve whitespace: |     line with whitespace preserved
                 }
             }),
             mdExt({
-                name: 'deletionsInline',
+                name: 'deletion',
                 level: 'inline',
                 start: /\{--/,
                 tokenMatch: /^(?:\{--(?:.+?)--\})/,
@@ -71,7 +71,7 @@ Preserve whitespace: |     line with whitespace preserved
                 }
             }),
             mdExt({
-                name: 'commentsInline',
+                name: 'comment',
                 level: 'inline',
                 start: /\{>>/,
                 tokenMatch: /^(?:\{>>(?:.+?)<<\})/,
@@ -87,7 +87,7 @@ Preserve whitespace: |     line with whitespace preserved
                 }
             }),
             mdExt({
-                name: 'subInline',
+                name: 'sub',
                 level: 'inline',
                 start: /~[^~]/,
                 tokenMatch: /^(?:~(?:[^~]+.*?)~)/,
@@ -103,7 +103,7 @@ Preserve whitespace: |     line with whitespace preserved
                 }
             }),
             mdExt({
-                name: 'supInline',
+                name: 'sup',
                 level: 'inline',
                 start: /\^[^^]/,
                 tokenMatch: /^(?:\^(?:[^^]+.*?)\^)/,
