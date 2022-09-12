@@ -10,6 +10,7 @@ import doc from './document.js';
 import config from './config.js';
 import { AbstractExtension } from './abstract-extension.js';
 import signale from 'signale';
+import { parseCommands } from './commands.js';
 
 // eslint-disable-next-line @typescript-eslint/naming-convention
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
@@ -268,6 +269,9 @@ marked.use({ tokenizer });
  */
 export function parse(fileData: string) {
     doc.reset();
+
+    // Commands
+    fileData = parseCommands(fileData);
 
     // Preparsing
     for (let ext of preParseExtensions) {
