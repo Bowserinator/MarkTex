@@ -45,10 +45,11 @@ Inline: Surround with @
             mdExt({
                 name: 'asciiMathBlock',
                 level: 'block',
-                start: /^@@[^@]/m,
-                tokenMatch: /^(?:@@(?:[\s\S]+?)@@)/,
+                start: /^ {0,3}@@[^@]/m,
+                tokenMatch: /^ {0,3}(?:@@(?:[\s\S]+?)@@)/,
                 tokenRules(token, src, tokens, match) {
-                    token.text = match[0].trim().substring(2, match[0].length - 2);
+                    const txt = match[0].trim();
+                    token.text = txt.trim().substring(2, txt.length - 2);
                 },
                 renderer(token: any) {
                     // TODO: use another thing
