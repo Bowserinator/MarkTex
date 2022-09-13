@@ -1,8 +1,12 @@
 // @ts-nocheck
 import { AbstractExtension } from '../abstract-extension.js';
 import { Marked } from '../types.js';
+import { concatRe } from '../util/util.js';
 
 const ROMAN_RE = /^M{0,4}(CM|CD|D?C{0,3})(XC|XL|L?X{0,3})(IX|IV|V?I{0,3})$/;
+const BULLET_RE = /(?:[*+-]|[A-Za-z0-9]{1,9}[.)]|\([A-Za-z0-9]+\))/;
+const LIST_RE = concatRe('^( {0,3}', BULLET_RE, ')([ \t][^\n]+?)?(?:\n|$)');
+
 
 /**
  * Parse bullet text to get type
@@ -99,16 +103,16 @@ RegExps were hardcoded and I'm not going back and changing them.
             marked.Lexer.rules.block.pedantic.bullet =
             marked.Lexer.rules.block.gfm.bullet =
             marked.Lexer.rules.block.normal.bullet =
-            /(?:[*+-]|[A-Za-z0-9]{1,9}[.)]|\([A-Za-z0-9]+\))/;
+            BULLET_RE;
         marked.Lexer.rules.listItemStart =
             marked.Lexer.rules.block.gfm.listItemStart =
             marked.Lexer.rules.block.normal.listItemStart =
-            /^( *)(?:[*+-]|[A-Za-z0-9]{1,9}[.)]|\([A-Za-z0-9]+\)) */;
+            concatRe(/^( *)/, BULLET_RE, / */);
 
         marked.Lexer.rules.block.list =
         marked.Lexer.rules.block.gfm.list =
         marked.Lexer.rules.block.normal.list =
-            /^( {0,3}(?:[*+-]|[A-Za-z0-9]{1,9}[.)]|\([A-Za-z0-9]\)))([ \t][^\n]+?)?(?:\n|$)/;
+            LIST_RE;
     }
 
     renderer() {
@@ -148,8 +152,7 @@ RegExps were hardcoded and I'm not going back and changing them.
                         items: []
                     };
 
-                    bull = bulletText ? `[A-Za-z0-9]{1,9}\\${bull.slice(-1)}` : `\\${bull}`;
-
+                    bull = bulletText ? (bulletText.startsWith('(') ? '\\(' : '') + `[A-Za-z0-9]{1,9}\\${bull.slice(-1)}` : `\\${bull}`;
                     if (this.options.pedantic)
                         bull = bulletText ? bull : '[*+-]';
 
@@ -192,7 +195,7 @@ RegExps were hardcoded and I'm not going back and changing them.
                         }
 
                         if (!endEarly) {
-                            const nextBulletRegex = new RegExp(`^ {0,${Math.min(3, indent - 1)}}(?:[*+-]|[A-Za-z0-9]{1,9}[.)])((?: [^\\n]*)?(?:\\n|$))`);
+                            const nextBulletRegex = new RegExp(`^ {0,${Math.min(3, indent - 1)}}(?:[*+-]|\\(*[A-Za-z0-9]{1,9}[.)])((?: [^\\n]*)?(?:\\n|$))`);
                             const hrRegex = new RegExp(`^ {0,${Math.min(3, indent - 1)}}((?:- *){3,}|(?:_ *){3,}|(?:\\* *){3,})(?:\\n+|$)`);
                             const fencesBeginRegex = new RegExp(`^ {0,${Math.min(3, indent - 1)}}(?:\`\`\`|~~~)`);
                             const headingBeginRegex = new RegExp(`^ {0,${Math.min(3, indent - 1)}}#`);

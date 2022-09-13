@@ -8,10 +8,13 @@ import config from '../config.js';
  * @return HTML for rendered latex
  */
 export default function renderLatex(str: string, displayMode: boolean): string {
-    return katex.renderToString(str, {
+    let html = katex.renderToString(str, {
         displayMode,
         throwOnError: false,
         trust: config.trustLatex,
         strict: 'ignore'
     });
+    if (!displayMode)
+        html = html.replace('class="katex"', 'class="katex katex-inline"');
+    return html;
 }
