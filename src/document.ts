@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/naming-convention */
 import { marked } from 'marked';
 
 /**
@@ -11,6 +12,8 @@ class Document {
     headers: Array<string>;
     headerNumbers: [number, number, number, number, number, number, number, number];
 
+    standardFontSize: number; // In pt
+
     /** Construct a document */
     constructor() {
         this.reset();
@@ -21,6 +24,7 @@ class Document {
         this.footnotes = [];
         this.headers = [];
         this.headerNumbers = [0, 0, 0, 0, 0, 0, 0, 0];
+        this.standardFontSize = 12;
     }
 
     addHeader(level: number) {

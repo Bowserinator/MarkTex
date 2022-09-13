@@ -86,4 +86,20 @@ export class AbstractExtension {
     postHTML(html: string): string {
         return html;
     }
+
+    /**
+     * Modify the renderer
+     * @return marked renderer keys to overwrite
+     */
+    renderer() {
+        return {};
+    }
+
+    /**
+     * Modify the tokenizer
+     * @return marked tokenizer keys to overwrite
+     */
+    tokenizer() {
+        return {};
+    }
 }

@@ -2,16 +2,38 @@ body {
     font-family: 'CMU Serif';
     font-size: 12pt;
     background-color: #eee;
-    letter-spacing: -0.02rem;
+    letter-spacing: -0.013rem;
+    -webkit-text-stroke: 1px rgba(0,0,0,0.1);
 }
 
 // TODO: fix its not the p have no margin the center has a margin??
 .p-no-margin p {margin: 0}
 
+// All list styles:
+@mixin list($name, $type) {
+    &.#{$name}-paren > li::marker{ content: counter(list, #{$type}) ") "; }
+    &.#{$name}-paren2 > li::marker{ content: "(" counter(list, #{$type}) ") "; }
+    &.#{$name}-period > li::marker{ content: counter(list, #{$type}) ". "; }
+}
+
+
+ol {
+    counter-reset: list;
+    margin: 0;
+
+    & > li { counter-increment: list; }
+
+    @include list("number", "decimal");
+    @include list("upper-alpha", "upper-alpha");
+    @include list("lower-alpha", "lower-alpha");
+    @include list("lower-roman", "lower-roman");
+    @include list("upper-roman", "lower-roman");
+}
+
+
 h1,h2,h3,h4,h5, strong{
-    letter-spacing: 0.0em;
-    transform: scale(1.06, 0.9);
-    display: inline-block;
+    letter-spacing: -0.04rem; // Only apply to large? idk
+    -webkit-text-stroke: none;
 
 }
 

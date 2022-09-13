@@ -76,10 +76,8 @@ export function parseCommands(md: string): string {
     let newMd = '';
     let i = 0;
 
-    console.log(nestLevel)
-
     for (let match of md.matchAll(COMMAND_RE)) {
-        if (!match.index) continue;
+        if (match.index === undefined) continue;
 
         const cmdName = match[0].substring(1, match[0].length - 1).split('(')[0];
         const args = match[1] ? match[1].substring(1, match[1].length - 1) : '';
@@ -89,9 +87,8 @@ export function parseCommands(md: string): string {
         let cmdData = md.substring(match.index + match[0].length, endParenIndex);
         cmdData = parseCommands(cmdData); // TODO: pass helper data to avoid recomputing paren
 
-        if (nest !== 0) continue; // TODO
 
-        console.log(cmdName, nest, match.index + match[0].length - 1, endParenIndex)
+        if (nest !== 0) continue; // TODO
 
         const command = commands[cmdName];
 
