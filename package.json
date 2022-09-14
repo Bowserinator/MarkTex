@@ -25,6 +25,7 @@
         "marked": "^4.0.19",
         "marked-images": "^3.0.0",
         "queue": "^6.0.2",
+        "roman-numerals": "^0.3.2",
         "signale": "^1.4.0",
         "yaml": "^2.1.1"
     },

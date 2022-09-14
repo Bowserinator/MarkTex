@@ -1,7 +1,9 @@
 
-
-
-
+/**
+ * Concat regex expressions. Flags will be taken from args[0]
+ * @param args Regexps or strings representing regexps
+ * @return Concatnated regex
+ */
 export function concatRe(...args: Array<RegExp | string>) {
     let sources = args.map(s => s instanceof RegExp ? s.source : s);
     let flags = '';

@@ -3,9 +3,27 @@ import { AbstractExtension } from '../abstract-extension.js';
 import { Marked } from '../types.js';
 import { concatRe } from '../util/util.js';
 
+import roman from 'roman-numerals';
+
 const ROMAN_RE = /^M{0,4}(CM|CD|D?C{0,3})(XC|XL|L?X{0,3})(IX|IV|V?I{0,3})$/;
-const BULLET_RE = /(?:[*+-]|[A-Za-z0-9]{1,9}[.)]|\([A-Za-z0-9]+\))/;
+const BULLET_RE = /(?:[*+-]|[A-Za-z0-9]{1,9}[.)]|\([A-Za-z0-9]{1,9}\))/;
 const LIST_RE = concatRe('^( {0,3}', BULLET_RE, ')([ \t][^\n]+?)?(?:\n|$)');
+
+
+/**
+ * Convert an alphabet (base26 number) to a number
+ * @param alpha Bullet, ie 'a' or 'bx'
+ * @return Number
+ */
+function alphabetToNumber(alpha: string) {
+    const ALPHABET_ORDER = 'abcdefghijklmnpqrstuvwxyz';
+    const reverse = alpha.toLowerCase().split('').reverse();
+
+    let value = 0;
+    for (let i = 0; i < reverse.length; i++)
+        value += (ALPHABET_ORDER.indexOf(reverse[i]) + 1) * Math.pow(26, i);
+    return value;
+}
 
 
 /**
@@ -37,25 +55,23 @@ function parseBullet(bulletText): {
     if (!Number.isNaN(start))
         return { start, type: 'number-' + formatType };
 
-    // TODO: convert numbers
-
     // Lowercase
     if (bulletText.toLowerCase() === bulletText)
         // Lowercase roman
-        if (ROMAN_RE.test(bulletText.toUpperCase()))
-            return { start: 1, type: 'lower-roman-' + formatType }; // TODO: roman -> number
+        if (bulletText.length > 1 && ROMAN_RE.test(bulletText.toUpperCase()))
+            return { start: roman.toArabic(bulletText), type: 'lower-roman-' + formatType };
         // Lower alpha
         else if (/[a-z]+/.test(bulletText))
-            return { start: 1, type: 'lower-alpha-' + formatType };
+            return { start: alphabetToNumber(bulletText), type: 'lower-alpha-' + formatType };
 
     // Uppercase
     if (bulletText.toUpperCase() === bulletText)
         // Upper roman
         if (ROMAN_RE.test(bulletText))
-            return { start: 1, type: 'upper-roman-' + formatType };
+            return { start: roman.toArabic(bulletText), type: 'upper-roman-' + formatType };
         // Upper alpha
         else if (/[A-Z]+/.test(bulletText))
-            return { start: 1, type: 'upper-alpha-' + formatType };
+            return { start: alphabetToNumber(bulletText), type: 'upper-alpha-' + formatType };
 
     throw new Error(`Unknown bullet type for bullet ${bulletText}`);
 }
@@ -92,9 +108,6 @@ Extend markedjs lists to allow for more bullet types, namely:
     alphanumeric)
     (alphanumeric)
     alphanumeric.
-
-Ideally it would only allow alpha OR numeric but a lot of the
-RegExps were hardcoded and I'm not going back and changing them.
 `, -99);
     }
 
@@ -105,12 +118,14 @@ RegExps were hardcoded and I'm not going back and changing them.
             marked.Lexer.rules.block.normal.bullet =
             BULLET_RE;
         marked.Lexer.rules.listItemStart =
+            marked.Lexer.rules.block.pedantic.listItemStart =
             marked.Lexer.rules.block.gfm.listItemStart =
             marked.Lexer.rules.block.normal.listItemStart =
             concatRe(/^( *)/, BULLET_RE, / */);
 
         marked.Lexer.rules.block.list =
         marked.Lexer.rules.block.gfm.list =
+        marked.Lexer.rules.block.pedantic.list =
         marked.Lexer.rules.block.normal.list =
             LIST_RE;
     }
@@ -140,8 +155,6 @@ RegExps were hardcoded and I'm not going back and changing them.
 
                     let bull = cap[1].trim();
                     const bulletText = bull.length > 1 ? bull : null;
-
-                    // TODO: start shouldn't assume numeric
                     const bulletData = parseBullet(bulletText);
                     const list: ListType = {
                         type: 'list',
@@ -152,7 +165,17 @@ RegExps were hardcoded and I'm not going back and changing them.
                         items: []
                     };
 
-                    bull = bulletText ? (bulletText.startsWith('(') ? '\\(' : '') + `[A-Za-z0-9]{1,9}\\${bull.slice(-1)}` : `\\${bull}`;
+                    let nextReType = '[A-Za-z0-9]';
+                    if (bulletData && bulletData.type)
+                        if (bulletData.type.startsWith('number-'))
+                            nextReType = '[0-9]';
+                        else if (bulletData.type.includes('-upper-'))
+                            nextReType = '[A-Z]';
+                        else if (bulletData.type.includes('-lower-'))
+                            nextReType = '[a-z]';
+
+                    bull = bulletText ? (bulletText.startsWith('(') ? '\\(' : '') +
+                        `${nextReType}{1,9}\\${bull.slice(-1)}` : `\\${bull}`;
                     if (this.options.pedantic)
                         bull = bulletText ? bull : '[*+-]';
 
@@ -195,7 +218,7 @@ RegExps were hardcoded and I'm not going back and changing them.
                         }
 
                         if (!endEarly) {
-                            const nextBulletRegex = new RegExp(`^ {0,${Math.min(3, indent - 1)}}(?:[*+-]|\\(*[A-Za-z0-9]{1,9}[.)])((?: [^\\n]*)?(?:\\n|$))`);
+                            const nextBulletRegex = new RegExp(`^ {0,${Math.min(3, indent - 1)}}(?:[*+-]|\\(*${nextReType}{1,9}[.)])((?: [^\\n]*)?(?:\\n|$))`);
                             const hrRegex = new RegExp(`^ {0,${Math.min(3, indent - 1)}}((?:- *){3,}|(?:_ *){3,}|(?:\\* *){3,})(?:\\n+|$)`);
                             const fencesBeginRegex = new RegExp(`^ {0,${Math.min(3, indent - 1)}}(?:\`\`\`|~~~)`);
                             const headingBeginRegex = new RegExp(`^ {0,${Math.min(3, indent - 1)}}#`);

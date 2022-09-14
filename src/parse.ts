@@ -92,6 +92,10 @@ export function parse(fileData: string) {
     doc.reset();
 
     // Commands
+
+    // TODO: move to ext
+    fileData = fileData.replaceAll('\n\n+++\n\n', '\n\n<div class="pagebreak"></div>\n\n');
+
     fileData = parseCommands(fileData);
 
     // Preparsing
@@ -109,7 +113,7 @@ export function parse(fileData: string) {
     return html.replaceAll(
         config.tocTag,
         `<div class="toc">${doc.headers.join('<br>')}</div>`
-    ).replaceAll('@newpage', '<div class="pagebreak"></div>'); // TODO: neater?
+    ); // TODO: neater?
 }
 
 

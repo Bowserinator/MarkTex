@@ -11,17 +11,14 @@ body {
 
 // All list styles:
 @mixin list($name, $type) {
-    &.#{$name}-paren > li::marker{ content: counter(list, #{$type}) ") "; }
-    &.#{$name}-paren2 > li::marker{ content: "(" counter(list, #{$type}) ") "; }
-    &.#{$name}-period > li::marker{ content: counter(list, #{$type}) ". "; }
+    &.#{$name}-paren > li::marker{ content: counter(list-item, #{$type}) ") "; }
+    &.#{$name}-paren2 > li::marker{ content: "(" counter(list-item, #{$type}) ") "; }
+    &.#{$name}-period > li::marker{ content: counter(list-item, #{$type}) ". "; }
 }
 
 
 ol {
-    counter-reset: list;
     margin: 0;
-
-    & > li { counter-increment: list; }
 
     @include list("number", "decimal");
     @include list("upper-alpha", "upper-alpha");
