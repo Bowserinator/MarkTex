@@ -58,7 +58,7 @@ function parseBullet(bulletText): {
     // Lowercase
     if (bulletText.toLowerCase() === bulletText)
         // Lowercase roman
-        if (bulletText.length > 1 && ROMAN_RE.test(bulletText.toUpperCase()))
+        if ((bulletText.length > 1 || bulletText === 'I') && ROMAN_RE.test(bulletText.toUpperCase()))
             return { start: roman.toArabic(bulletText), type: 'lower-roman-' + formatType };
         // Lower alpha
         else if (/[a-z]+/.test(bulletText))
@@ -67,7 +67,7 @@ function parseBullet(bulletText): {
     // Uppercase
     if (bulletText.toUpperCase() === bulletText)
         // Upper roman
-        if (ROMAN_RE.test(bulletText))
+        if ((bulletText.length > 1 || bulletText === 'i') && ROMAN_RE.test(bulletText))
             return { start: roman.toArabic(bulletText), type: 'upper-roman-' + formatType };
         // Upper alpha
         else if (/[A-Z]+/.test(bulletText))
