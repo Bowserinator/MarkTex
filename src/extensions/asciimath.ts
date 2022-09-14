@@ -52,10 +52,20 @@ Inline: Surround with @
                     token.text = txt.trim().substring(2, txt.length - 2);
                 },
                 renderer(token: any) {
-                    // TODO: use another thing
-                    // Preserve original newlines: split, parse each separately then rejoin
-                    // with the LaTeX newline
-                    const orgText = token.text.split('\n');
+                    // Combine lines that don't end in ' \\', which just means break the code
+                    // and not an actual newline
+                    // Otherwise \n -> \newline
+                    const orgText = token.text.split('\n')
+                        .filter((line: string) => line.length)
+                        .reduce((a: Array<string>, b: string) => {
+                            const prev = a[a.length - 1];
+                            if (prev !== undefined && prev.endsWith(' \\\\'))
+                                a[a.length - 1] = prev.substring(0, prev.length - 3) + b;
+                            else
+                                a.push(b);
+                            return a;
+                        }, ['']);
+
                     // @ts-expect-error
                     const asciiText = orgText.map(asciimath2latex.default).join('\\newline');
                     return renderLatex(asciiText, true);
