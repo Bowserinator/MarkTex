@@ -19,6 +19,7 @@
         "asciimath-to-latex": "^0.5.1",
         "chokidar": "^3.5.3",
         "commander": "^9.4.0",
+        "find-matching-bracket": "^1.0.3",
         "glob": "^8.0.3",
         "highlight.js": "^11.6.0",
         "katex": "^0.16.1",

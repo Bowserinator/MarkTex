@@ -6,11 +6,10 @@ import path from 'path';
 import { fileURLToPath } from 'url';
 import fs from 'fs';
 
-import doc from './document.js';
+import { doc } from './document.js';
 import config from './config.js';
 import { AbstractExtension } from './abstract-extension.js';
 import signale from 'signale';
-import { parseCommands } from './commands.js';
 
 // eslint-disable-next-line @typescript-eslint/naming-convention
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
@@ -62,7 +61,7 @@ const extensions: Array<AbstractExtension> = await extensionPaths.reduce(async (
     return arr;
 }, Promise.resolve([]));
 
-extensions.sort((a, b) => a.priority - b.priority);
+extensions.sort((a, b) => b.priority - a.priority);
 
 
 function loadExtension(extension: AbstractExtension) {
@@ -91,12 +90,9 @@ marked.use({ renderer });
 export function parse(fileData: string) {
     doc.reset();
 
-    // Commands
 
     // TODO: move to ext
     fileData = fileData.replaceAll('\n\n+++\n\n', '\n\n<div class="pagebreak"></div>\n\n');
-
-    fileData = parseCommands(fileData);
 
     // Preparsing
     for (let ext of preParseExtensions) {
@@ -126,6 +122,7 @@ ${extensions.map(ext => ext.htmlHeaderInject()).join('\n')}
        
         <link rel="stylesheet"
         href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/11.6.0/styles/default.min.css">
+
         <!--<script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/11.6.0/highlight.min.js"></script>-->
     </head>
 

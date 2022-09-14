@@ -1,6 +1,6 @@
 
 
-export class AbstractCommand {
+export abstract class AbstractCommand {
     id: string;
     name: string;
     author: string;
@@ -15,13 +15,15 @@ export class AbstractCommand {
      * @param description Sort description of features
      */
     constructor(id: string, name: string, author: string, description: string) {
-        if (this.constructor === AbstractCommand)
-            throw new Error('AbstractCommand is abstract and cannot be instantiated');
         this.id = id;
         this.name = name;
         this.author = author;
         this.description = description;
         this.disabled = false;
+    }
+
+    html(args: { [K: string]: any }, body: string) {
+        return `${this.startTag(args)}${this.body(args, body)}${this.endTag(args)}`;
     }
 
     startTag(args: { [K: string]: any }) {

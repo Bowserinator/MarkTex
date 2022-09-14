@@ -1,8 +1,9 @@
 import { AbstractExtension } from '../abstract-extension.js';
 import YAML from 'yaml';
+import { doc } from '../document.js';
 
 /**
- * Front matter, TODO
+ * Front matter, set file metadata
  * @author Bowserinator
  */
 class FrontMatterExtension extends AbstractExtension {
@@ -29,9 +30,8 @@ key2:
 
             let yaml = match[0].trim();
             yaml = yaml.substring(3, yaml.length - 3);
-            console.log(YAML.parse(yaml)); // TOOD: write to document
+            doc.setFrontMatter(YAML.parse(yaml));
         }
-
         return md;
     }
 }

@@ -1,5 +1,7 @@
 /* eslint-disable @typescript-eslint/naming-convention */
 import { marked } from 'marked';
+import { AbstractStyle } from './styles/abstract-style';
+import { defaultMonoTextStyle, defaultSansSerifTextStyle, defaultSerifTextStyle } from './styles/text/font-styles.js';
 
 /**
  * A single document to be converted. The markdown parser
@@ -7,12 +9,13 @@ import { marked } from 'marked';
  * it's updated.
  * @author Bowserinator
  */
-class Document {
+export class Document {
     footnotes: Array<string>;
     headers: Array<string>;
     headerNumbers: [number, number, number, number, number, number, number, number];
 
-    standardFontSize: number; // In pt
+    styles: { [K: string]: AbstractStyle };
+    frontMatter: { [K: string]: any };
 
     /** Construct a document */
     constructor() {
@@ -24,7 +27,22 @@ class Document {
         this.footnotes = [];
         this.headers = [];
         this.headerNumbers = [0, 0, 0, 0, 0, 0, 0, 0];
-        this.standardFontSize = 12;
+        this.frontMatter = {};
+        this.styles = {
+            serifTextStyle: defaultSerifTextStyle,
+            sansSerifTextStyle: defaultSansSerifTextStyle,
+            monoTextStyle: defaultMonoTextStyle,
+
+            globalTextStyle: defaultSerifTextStyle,
+            codeBlockStyle: defaultSerifTextStyle, // TODO
+            pageStyle: defaultSerifTextStyle, // TODO
+            tableStyle: defaultSerifTextStyle // TODO
+        };
+    }
+
+    setFrontMatter(frontMatter: { [K: string]: any }) {
+        this.frontMatter = frontMatter;
+        // TODO: update styles??
     }
 
     addHeader(level: number) {
@@ -51,6 +69,4 @@ class Document {
     }
 }
 
-const doc = new Document();
-
-export default doc;
+export const doc = new Document();

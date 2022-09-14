@@ -5,7 +5,7 @@ import { Marked } from './types.js';
  * Extend this class and override the methods
  * @author Bowserinator
  */
-export class AbstractExtension {
+export abstract class AbstractExtension {
     id: string;
     name: string;
     author: string;
@@ -24,8 +24,6 @@ export class AbstractExtension {
      *  know what you are doing!
      */
     constructor(id: string, name: string, author: string, description: string, priority = 100) {
-        if (this.constructor === AbstractExtension)
-            throw new Error('AbstractExtension is abstract and cannot be instantiated');
         this.id = id;
         this.name = name;
         this.author = author;

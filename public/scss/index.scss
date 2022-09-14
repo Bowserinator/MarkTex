@@ -9,6 +9,20 @@ body {
 // TODO: fix its not the p have no margin the center has a margin??
 .p-no-margin p {margin: 0}
 
+.katex-display>.katex>.katex-html {
+    display: inline-block !important;
+}
+
+.error {
+    color: red;
+}
+.error > p,
+.error > .error {
+    display: inline-block;
+    margin: 0;
+}
+
+
 // All list styles:
 @mixin list($name, $type) {
     &.#{$name}-paren > li::marker{ content: counter(list-item, #{$type}) ") "; }
@@ -16,6 +30,10 @@ body {
     &.#{$name}-period > li::marker{ content: counter(list-item, #{$type}) ". "; }
 }
 
+.cmd-box {
+    border: 1px solid black;
+    display: inline-block;
+}
 
 ol {
     margin: 0;

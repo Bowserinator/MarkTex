@@ -3,6 +3,7 @@ interface MdSettings {
     level: string;      // 'block' or 'inline'
     start: RegExp;      // Regex start hint
     tokenMatch: RegExp; // Regex to perform match
+    childTokens?: Array<string>; // Array of child token names
 
     // Override default start function
     startFunction?: (src: string) => number | undefined;
@@ -26,6 +27,7 @@ export function mdExt(keys: MdSettings): any {
     return {
         name: keys.name,
         level: keys.level,
+        childTokens: keys.childTokens,
         start(src: string) {
             if (keys.startFunction)
                 return keys.startFunction(src);
