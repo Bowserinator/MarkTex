@@ -113,7 +113,7 @@ Commands can be both block or inline.
                     if (command)
                         // @ts-expect-error
                         return command.html(token.args, this.parser.parseInline(token.inner));
-                    // TODO: error class
+                    // @ts-expect-error
                     return `\n\n<div class="error">@${token.cmdName}{${this.parser.parseInline(token.inner)}}</div>\n\n`;
                 }
             },
@@ -137,7 +137,7 @@ Commands can be both block or inline.
                     if (command)
                         // @ts-expect-error
                         return command.html(token.args, this.parser.parse(token.tokens));
-                    // TODO: error class
+                    // @ts-expect-error
                     return `\n\n<div class="error">@${token.cmdName}{${this.parser.parse(token.tokens)}}</div>\n\n`;
                 }
             }

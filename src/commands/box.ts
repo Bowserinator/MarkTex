@@ -23,9 +23,7 @@ Supported arguments:
     // TODO: padding
 
     startTag(args: { [K: string]: any }) {
-        let styleArgs: any = {
-            border: '2px solid black'
-        };
+        let styleArgs: any = {};
         if (args.border) styleArgs.border = args.border;
         if (args.bg) styleArgs.background = args.bg;
         if (args.color) styleArgs.color = args.color;

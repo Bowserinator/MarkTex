@@ -90,10 +90,6 @@ marked.use({ renderer });
 export function parse(fileData: string) {
     doc.reset();
 
-
-    // TODO: move to ext
-    fileData = fileData.replaceAll('\n\n+++\n\n', '\n\n<div class="pagebreak"></div>\n\n');
-
     // Preparsing
     for (let ext of preParseExtensions) {
         let newFileData = ext.preParse(fileData);

@@ -17,6 +17,11 @@ Additions: {++added++}
 Deletions: {--deleted--}
 Comments: {>>comment<<}
 Preserve whitespace: |     line with whitespace preserved
+Small caps: ^^Small Caps^^
+Oblique: //oblique//
+Underline: _text_ (overrides normal markdown)
+Filler: /-/ (converted to nothing, used to trick the parser)
+Pagebreak: +++ (Block)
 `);
     }
 
@@ -51,7 +56,7 @@ Preserve whitespace: |     line with whitespace preserved
                 },
                 renderer(token: any) {
                     // @ts-expect-error
-                    return `<span class="inline-addition">${this.parser.parseInline(token.tokens)}</span>`;
+                    return `<ins class="text-inline-addition">${this.parser.parseInline(token.tokens)}</ins>`;
                 }
             }),
             mdExt({
@@ -67,7 +72,7 @@ Preserve whitespace: |     line with whitespace preserved
                 },
                 renderer(token: any) {
                     // @ts-expect-error
-                    return `<span class="inline-deletion">${this.parser.parseInline(token.tokens)}</span>`;
+                    return `<del class="text-inline-deletion">${this.parser.parseInline(token.tokens)}</del>`;
                 }
             }),
             mdExt({
@@ -83,7 +88,7 @@ Preserve whitespace: |     line with whitespace preserved
                 },
                 renderer(token: any) {
                     // @ts-expect-error
-                    return `<span class="inline-comment">${this.parser.parseInline(token.tokens)}</span>`;
+                    return `<span class="text-inline-comment">${this.parser.parseInline(token.tokens)}</span>`;
                 }
             }),
             mdExt({
@@ -100,6 +105,22 @@ Preserve whitespace: |     line with whitespace preserved
                 renderer(token: any) {
                     // @ts-expect-error
                     return `<sub>${this.parser.parseInline(token.tokens)}</sub>`;
+                }
+            }),
+            mdExt({
+                name: 'smallCaps',
+                level: 'inline',
+                start: /\^\^[^^]/,
+                tokenMatch: /^(?:\^\^(?:[^^]+.*?)\^\^)/,
+                tokenRules(token, src, tokens, match) {
+                    token.text = match[0].substring(2, match[0].length - 2);
+                },
+                inline(lexer, token) {
+                    lexer.inline(token.text, token.tokens);
+                },
+                renderer(token: any) {
+                    // @ts-expect-error
+                    return `<span class="text-small-caps">${this.parser.parseInline(token.tokens)}</span>`;
                 }
             }),
             mdExt({
@@ -134,6 +155,56 @@ Preserve whitespace: |     line with whitespace preserved
                 renderer(token: any) {
                     // @ts-expect-error
                     return this.parser.parseInline(token.tokens);
+                }
+            }),
+            mdExt({
+                name: 'slant',
+                level: 'inline',
+                start: /\/\/[^/]/,
+                tokenMatch: /^(?:\/\/(?:[^/]+.*?)\/\/)/,
+                tokenRules(token, src, tokens, match) {
+                    token.text = match[0].substring(2, match[0].length - 2);
+                },
+                inline(lexer, token) {
+                    lexer.inline(token.text, token.tokens);
+                },
+                renderer(token: any) {
+                    // @ts-expect-error
+                    return `<span class="text-slant">${this.parser.parseInline(token.tokens)}</span>`;
+                }
+            }),
+            mdExt({
+                name: 'underline',
+                level: 'inline',
+                start: /_[^_]/,
+                tokenMatch: /^(?:_(?:[^_]+.*?)_)/,
+                tokenRules(token, src, tokens, match) {
+                    token.text = match[0].substring(1, match[0].length - 1);
+                },
+                inline(lexer, token) {
+                    lexer.inline(token.text, token.tokens);
+                },
+                renderer(token: any) {
+                    // @ts-expect-error
+                    return `<u>${this.parser.parseInline(token.tokens)}</u>`;
+                }
+            }),
+            mdExt({
+                name: 'filler',
+                level: 'inline',
+                start: /\/-\//,
+                tokenMatch: /^(?:\/-\/)/,
+                renderer(token: any) {
+                    return ``;
+                }
+            }),
+            mdExt({
+                name: 'pageBreak',
+                level: 'block',
+                start: /\+\+\+\n/,
+                tokenMatch: /^(?:\+\+\+\n)/,
+                renderer(token: any) {
+                    return `\n<div class="text-pagebreak"></div>\n`;
                 }
             })];
     }

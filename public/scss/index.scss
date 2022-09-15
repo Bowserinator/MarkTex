@@ -1,9 +1,18 @@
+
+$offset: 0.1px;
+$stroke: rgba(0,0,0,0.3);
+
 body {
     font-family: 'CMU Serif';
     font-size: 12pt;
     background-color: #eee;
     letter-spacing: -0.013rem;
-    -webkit-text-stroke: 1px rgba(0,0,0,0.1);
+    text-shadow:
+   -$offset -$offset 0 $stroke,  
+   $offset -$offset 0 $stroke,
+    -$offset $offset 0 $stroke,
+    $offset $offset 0 $stroke;
+    //-webkit-text-stroke: 1px rgba(0,0,0,0.1);
 }
 
 // TODO: fix its not the p have no margin the center has a margin??
@@ -12,6 +21,11 @@ body {
 .katex-display>.katex>.katex-html {
     display: inline-block !important;
 }
+
+.text-small-caps { font-variant: small-caps; }
+.text-slant { font-style: oblique; }
+u { text-decoration-color: currentColor; }
+
 
 .error {
     color: red;
@@ -142,7 +156,7 @@ h1:first-child {
         box-shadow: none;
     }
 
-    .pagebreak {
+    .text-pagebreak {
         clear: both;
         break-after: always;
         page-break-after: always
@@ -150,18 +164,18 @@ h1:first-child {
 }
 
 
-.inline-addition,
-.inline-comment,
-.inline-deletion {
+.text-inline-addition,
+.text-inline-comment,
+.text-inline-deletion {
     border-radius: 2px;
 }
 
-.inline-addition {
+.text-inline-addition {
     background-color: #C8E6C9;
 }
-.inline-deletion {
+.text-inline-deletion {
     background-color: #FFCDD2;
 }
-.inline-comment {
+.text-inline-comment {
     background-color: #BBDEFB;
 }
