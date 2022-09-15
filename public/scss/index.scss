@@ -56,7 +56,7 @@ ol {
     @include list("upper-alpha", "upper-alpha");
     @include list("lower-alpha", "lower-alpha");
     @include list("lower-roman", "lower-roman");
-    @include list("upper-roman", "lower-roman");
+    @include list("upper-roman", "upper-roman");
 }
 
 
