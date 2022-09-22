@@ -59,6 +59,14 @@ ol {
     @include list("upper-roman", "upper-roman");
 }
 
+li {
+    p:first-child {
+        margin-top: 0.5em;
+    }
+    p:only-child {
+        margin: 0.5em 0;
+    }
+}
 
 h1,h2,h3,h4,h5, strong{
     letter-spacing: -0.04rem; // Only apply to large? idk

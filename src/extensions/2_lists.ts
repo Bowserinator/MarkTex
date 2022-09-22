@@ -206,7 +206,7 @@ Extend markedjs lists to allow for more bullet types, namely:
                             // Treat indented code blocks (> 4 spaces) as having only 1 indent
                             indent = indent > 4 ? 1 : indent;
                             itemContents = line.slice(indent);
-                            indent += cap[1].length;
+                            indent += cap[1].match(/^\s*/)[0].length + Math.min(cap[1].trim().length, 3);
                         }
 
                         blankLine = false;
