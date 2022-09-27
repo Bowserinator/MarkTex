@@ -22,7 +22,7 @@ key2:
     }
 
     preParse(md: string) {
-        const re = /^(?:[\s])*---[\s\S]+---/;
+        const re = /^(?:[\s])*---[\s\S]+?---/;
         const match = re.exec(md);
 
         if (match) {

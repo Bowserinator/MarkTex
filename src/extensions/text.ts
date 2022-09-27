@@ -143,7 +143,16 @@ Pagebreak: +++ (Block)
                 name: 'whitespaceBlock',
                 level: 'block',
                 start: /^\| /m,
-                tokenMatch: /^(?:\| (?:.+?)(?:\n|$))/,
+                tokenMatch: /./, // Unused, ignore
+                matchFunction(src: string) {
+                    const match = /^(?:\| (?:.+?)(?:\n|$))/.exec(src);
+
+                    // Prevent this from breaking tables, all other |s must
+                    // be escaped in this block
+                    if (match && match[0].substring(1).match(/[^\\]\|/))
+                        return null;
+                    return match;
+                },
                 tokenRules(token, src, tokens, match) {
                     token.text = match[0].trim()
                         .substring(2, match[0].length)

@@ -5,6 +5,9 @@ interface MdSettings {
     tokenMatch: RegExp; // Regex to perform match
     childTokens?: Array<string>; // Array of child token names
 
+    // Override default match function
+    matchFunction?: (src: string) => RegExpExecArray | null;
+
     // Override default start function
     startFunction?: (src: string) => number | undefined;
 
@@ -35,7 +38,8 @@ export function mdExt(keys: MdSettings): any {
         },
         tokenizer(src: string, tokens: Array<any>) {
             const rule = keys.tokenMatch;
-            const match = rule.exec(src);
+            const match = keys.matchFunction
+                ? keys.matchFunction(src) : rule.exec(src);
             if (match) {
                 const token = {
                     type: keys.name,
